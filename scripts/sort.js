@@ -74,7 +74,9 @@ $(document).ready(function(){
 
 
 
-// TODO: complete stylesheet for showing array
-// TODO: CSS pointer events
-// while the array is sorting, make certain buttons uninteractable
-// TODO: reorganize so that everything is neatly in functions and stuff to make flow more readable
+/* 
+TODO: 
+    complete stylesheet for showing array
+    while the array is sorting, make certain buttons uninteractable
+    add ability to speed up or slow down animation speed
+ */
