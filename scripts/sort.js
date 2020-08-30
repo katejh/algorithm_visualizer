@@ -8,6 +8,10 @@ function activateEventHandlers(){
     document.getElementById("array-size-range-input").onchange = getArraySize;
     // event handler for when number input changes
     document.getElementById("array-size-number-input").onchange = getArraySize;
+    // event handler for testing the switching of items
+    document.getElementById("test-switch-array-items").addEventListener("click", function(){
+        switchItemsPrototype(10, 40);
+    });
 }
 
 // gets array size and updates values in DOM
@@ -41,14 +45,34 @@ function createArrayPrototype(){
 }
 
 // prototype for switching array items
-function switchItemsPrototype(){
-    var array_item_0 = document.getElementById("array-item-0");
-    var array_item_50 = document.getElementById("array-item-50");
+function switchItemsPrototype(item1, item2){
+    console.log("Switching items " + item1.toString() + " and " + item2.toString());
+
+    var array_item_1 = document.getElementById("array-item-" + item1.toString());
+    var array_item_2 = document.getElementById("array-item-" + item2.toString());
+
+    var temp_item = array_item_1.cloneNode();
+
+    // reassign IDs
+    array_item_1.id = array_item_2.id;
+    array_item_2.id = temp_item.id;
+
+    // animate moving to positions
+    $("#" + array_item_1.id).animate({
+        left: array_item_2.style.left,
+    });
+    $("#" + array_item_2.id).animate({
+        left: temp_item.style.left,
+    });
 }
 
 // activate functions
-activateEventHandlers();
-createArrayPrototype();
+$(document).ready(function(){  
+    activateEventHandlers();
+    createArrayPrototype();
+});
+
+
 
 // TODO: complete stylesheet for showing array
 // TODO: CSS pointer events
