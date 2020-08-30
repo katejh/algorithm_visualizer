@@ -19,24 +19,36 @@ function getArraySize(){
     document.getElementById("array-size-number-input").value = array_size;
 }
 
-activateEventHandlers();
-
 // prototype for creating array
-var arrayDisplay = document.getElementById("sorting-display");
-var array = [];
-var pos_left = 0;
-for (var i = 1; i <= array_size; i++){
-    array.push(i);
-    console.log("creating item " + i);
+function createArrayPrototype(){
+    
+    var arrayDisplay = document.getElementById("sorting-display");
+    var array = [];
+    var pos_left = 0;
+    for (var i = 0; i < array_size; i++){
+        array.push(i);
+        console.log("creating item " + i);
 
-    var item = document.createElement("div");
-    item.classList.add("array-item");
-    item.style.left = pos_left + "px";
-    pos_left += array_item_width;
-    item.style.height = i + "px";
-    item.style.width = array_item_width + "px";
-    arrayDisplay.appendChild(item);
+        var item = document.createElement("div");
+        item.classList.add("array-item");
+        item.id = "array-item-" + i.toString();
+        item.style.left = pos_left + "px";
+        pos_left += array_item_width;
+        item.style.height = i + "px";
+        item.style.width = array_item_width + "px";
+        arrayDisplay.appendChild(item);
+    }
 }
+
+// prototype for switching array items
+function switchItemsPrototype(){
+    var array_item_0 = document.getElementById("array-item-0");
+    var array_item_50 = document.getElementById("array-item-50");
+}
+
+// activate functions
+activateEventHandlers();
+createArrayPrototype();
 
 // TODO: complete stylesheet for showing array
 // TODO: CSS pointer events
