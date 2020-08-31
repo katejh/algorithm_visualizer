@@ -10,6 +10,11 @@ CURRENTLY UNFINISHED
 * [Functionalities](#functionalities)
 
 ## Technologies
+Project is created with:
+* HTML
+* CSS
+* Javascript
+* JQuery 3.5.1
 
 ## Setup
 To run this project locally, clone this repo onto your computer.
