@@ -79,8 +79,4 @@ TODO:
     complete stylesheet for showing array
     while the array is sorting, make certain buttons uninteractable
     add ability to speed up or slow down animation speed
-    set default array size at the start
-    make the sorting array items as elements instead of simple numbers and let these elements be represented by their values
-    add classes for original position and new position
-    create function to simplify creating an item
  */
