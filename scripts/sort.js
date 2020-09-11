@@ -25,7 +25,7 @@ var array = [];
  * data-current-position: the item's current position in the array, updates while it is being sorted (will be final position after finished sorting)
  */
 
-// function for all event handlers
+ // function for all event handlers
 function activateEventHandlers(){
     // event handler for array size being changed by number inout
     document.getElementById("array-size-number-input").addEventListener("change", function(){
@@ -33,7 +33,11 @@ function activateEventHandlers(){
     });
     // event handler for testing the switching of items
     document.getElementById("test-switch-array-items").addEventListener("click", function(){
-        switchItemsPrototype(10, 40);
+        switchItems(array[10], array[40]);
+    });
+    // button for activating merge sort
+    document.getElementById("merge-sort").addEventListener("click", function(){
+        array = sortMergeAscending(array);
     });
 }
 
@@ -53,6 +57,13 @@ function setArraySize(size){
     createRandomArray(array_size);
 }
 
+/*
+ * Creates an array of a given size and fills it with random values
+ * 
+ * @param size the size of the array
+ * 
+ * @returns void
+ */
 function createRandomArray(size){
     var arrayDisplay = document.getElementById("sorting-display");
     
@@ -97,6 +108,108 @@ function createRandomArray(size){
     }
 }
 
+/* 
+ * Sorts a given array using the merge sort algorithm
+ * 
+ * @param arr the array to be sorted
+ * 
+ * @returns the array sorted
+ * 
+ * TODO: implement button disabling and enabling, figure out why visualization is so wack
+ */
+function sortMergeAscending(arr) {
+    // disable some buttons while sorting
+
+    // sanity check: if array size is 1
+    if (arr.length == 1) {
+        return arr;
+    }
+
+    var middle_index = Math.trunc(arr.length / 2);
+
+    // sort left and right halves of the array
+    var arrLeft = sortMergeAscending(arr.slice(0, middle_index));
+    var arrRight = sortMergeAscending(arr.slice(middle_index));
+    
+    // copy merged halves into array
+    for (var i = 0; i < middle_index; i++) {
+        // visualize switching array items
+        switchItems(arr[i], arrLeft[i]);
+        // switch in the actual array
+        arr[i] = arrLeft[i];
+    }  
+    for (var i = middle_index; i < arr.length; i++) {
+        switchItems(arr[i], arrRight[i - middle_index]);
+        arr[i] = arrRight[i - middle_index];
+    }
+
+    // create new temporary array to temporarily store halves while reordering them
+    var mergedArr = [];
+
+    // merge halves
+    var next_left = 0, next_right = 0;
+    for (var i = 0; i < arr.length; i++) {
+        // sanity check if left half is already completely merged
+        if (next_left >= arrLeft.length) {
+            mergedArr.push(arrRight[next_right]);
+            next_right += 1;
+        }
+        // sanity check if right half is already completely merged
+        else if (next_right >= arrRight.length) {
+            mergedArr.push(arrLeft[next_left]);
+            switchItems(arr[i], arrLeft[next_left]);
+            next_left += 1;
+        }
+        // check the first unmerged element of each half and merge the element with the lesser data-value
+        else if (parseInt(arrLeft[next_left].getAttribute("data-value")) < parseInt(arrRight[next_right].getAttribute("data-value"))) {
+            mergedArr.push(arrLeft[next_left]);
+            next_left += 1;
+        }
+        else {
+            mergedArr.push(arrRight[next_right]);
+            next_right += 1;
+        }
+    }
+
+    console.log("merging both halves");
+    // copy mergedArr into arr
+    for (var i = 0; i < arr.length; i++) {
+        switchItems(arr[i], mergedArr[i]);
+        arr[i] = mergedArr[i];
+    }
+
+    // re-enable buttons
+
+    return arr;
+
+}
+
+/*
+ * In the array display, "physically" switches array items 
+ * 
+ * @param item1 an array item dom element to be switched
+ * @param item2 the other array item dom element to be switched
+ * 
+ * @returns void
+ */
+function switchItems(item1, item2){
+    console.log("Switching items " + item1.id + " and " + item2.id);
+
+    var item_temp = item1.cloneNode();
+
+    // reassign IDs
+    item1.id = item2.id;
+    item2.id = item_temp.id;
+
+    // animate moving to positions
+    $("#" + item1.id).animate({
+        left: item2.style.left,
+    }, "slow");
+    $("#" + item2.id).animate({
+        left: item_temp.style.left,
+    }, "slow");
+}
+
 // prototype for creating array
 function createArrayPrototype(){
     
@@ -118,28 +231,6 @@ function createArrayPrototype(){
     }
 }
 
-// prototype for switching array items
-function switchItemsPrototype(item1, item2){
-    console.log("Switching items " + item1.toString() + " and " + item2.toString());
-
-    var array_item_1 = document.getElementById("array-item-" + item1.toString());
-    var array_item_2 = document.getElementById("array-item-" + item2.toString());
-
-    var temp_item = array_item_1.cloneNode();
-
-    // reassign IDs
-    array_item_1.id = array_item_2.id;
-    array_item_2.id = temp_item.id;
-
-    // animate moving to positions
-    $("#" + array_item_1.id).animate({
-        left: array_item_2.style.left,
-    });
-    $("#" + array_item_2.id).animate({
-        left: temp_item.style.left,
-    });
-}
-
 // activate functions
 $(document).ready(function(){  
     activateEventHandlers();
@@ -153,11 +244,12 @@ TODO:
     complete stylesheet for showing array
     while the array is sorting, make certain buttons uninteractable
     add ability to speed up or slow down animation speed
-    set default array size at the start
+    (DONE)set default array size at the start
     (DONE)make the sorting array items as elements instead of simple numbers and let these elements be represented by their values
     (DONE)add attributes for original position and new position
     create function to simplify creating an item
     adjust array-item width based on array_size
     make ability to change max value
     (DONE)allow array to change while the slider is being changed
+    change array item colors to indicated when sorting is done or not
  */

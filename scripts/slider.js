@@ -21,7 +21,7 @@ var rangeSlider = function(){
         window.array_size = parseInt(this.value);
         console.log("array size changed to: " + array_size);
 
-        // update necessary elements to reflect change in array size
+        // update necessary elements to reflect change in array size including array input displays and array display itself
         $(this).next(value).html(this.value);
         createRandomArray(parseInt(this.value));
         $("#array-size-number-input").val(this.value);
